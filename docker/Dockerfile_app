@@ -1,0 +1,24 @@
+FROM python:3.12-alpine
+
+# Ensures that there are no prompts during build.
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Environment variables.
+ENV POSTGRES_USER=appuser
+ENV POSTGRES_PASSWORD=secret
+ENV POSTGRES_DB=appdb
+
+RUN apk add --update --no-cache \
+    curl \
+    git \
+    openssh-client
+
+WORKDIR /tmp
+
+COPY ./docker/requirements_app.txt ./requirements.txt
+RUN python3 -m pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt && \
+    rm requirements.txt
+
+RUN mkdir -p /home/dev_ws
+WORKDIR /home/dev_ws

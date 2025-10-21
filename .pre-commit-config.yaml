@@ -1,0 +1,36 @@
+repos:
+# Basic pre-commit hooks.
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.5.0
+  hooks:
+    - id: check-added-large-files
+      args: ["--maxkb=1024"]
+    - id: check-json
+      exclude: ^.devcontainer/|.vscode/
+    - id: pretty-format-json
+      args: ["--indent=4", "--autofix"]
+      exclude: ^.devcontainer/|.vscode/
+    - id: check-toml
+    - id: check-yaml
+    - id: end-of-file-fixer
+
+# Ruff for linting and formatting with auto-fix.
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.1.14
+  hooks:
+    # Run the linter.
+    - id: ruff
+      args: [ --fix, --config, .code_checker_configs/ruff.toml ]
+    # Run formatter.
+    - id: ruff-format
+      args: [ --config, .code_checker_configs/ruff.toml ]
+
+# Mypy for static code checking.
+- repo: local
+  hooks:
+    - id: mypy
+      name: mypy
+      types: [python]
+      pass_filenames: false
+      language: system
+      entry: sh -c "python3 -m mypy --config-file .code_checker_configs/mypy.ini"

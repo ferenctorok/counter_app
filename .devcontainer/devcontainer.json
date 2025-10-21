@@ -1,0 +1,21 @@
+{
+    "image": "counter_app:latest",
+    "runArgs": [
+        "--name=counter_app_vscode",
+        "--network=host",
+        "--privileged",
+        "--volume=/tmp:/tmp"
+    ],
+    "workspaceFolder": "/home/dev_ws",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/home/dev_ws,type=bind",
+    "postCreateCommand": "sh docker/devcontainer_post_launch_commands.sh",
+    "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.flake8",
+        "ms-python.black-formatter",
+        "yzhang.markdown-all-in-one",
+        "ms-azuretools.vscode-docker",
+        "tamasfe.even-better-toml",
+    ],
+}

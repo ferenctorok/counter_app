@@ -1,0 +1,25 @@
+FROM alpine:3.21
+
+# Install PostgreSQL
+RUN apk add --no-cache postgresql postgresql-contrib
+
+# Environment variables for user/database
+ENV POSTGRES_USER=appuser
+ENV POSTGRES_PASSWORD=secret
+ENV POSTGRES_DB=appdb
+ENV POSTGRES_PORT=5432
+ENV POSTGRES_DATA_DIR=/var/lib/postgresql/data
+
+# Create runtime directory for Unix socket
+RUN mkdir -p /run/postgresql \
+    && chown -R postgres:postgres /run/postgresql \
+    && chmod 777 /run/postgresql
+
+# Copy entrypoint
+COPY ./docker/database_entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Set default user
+USER postgres
+
+ENTRYPOINT ["docker-entrypoint.sh"]
